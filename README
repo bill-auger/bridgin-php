@@ -1,3 +1,10 @@
+skype4pidgin2irc -
+  a nifty little script that allows you
+  to bridge an IRC channel and a skype group chat
+  inspired by the 'chat.php' script at
+  https://github.com/robertbasic/blog-examples/tree/master/dbus
+
+
 skype4pidgin2irc install instructions for debian (ymmv)
 
 
