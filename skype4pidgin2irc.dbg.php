@@ -1,14 +1,18 @@
 <?php
 $DEBUG = true ;
 
-// add all relevant nicks/aliases to $ADMIN_NICKS to avoid infinite loopback
-$ADMIN_NICKS     = ['IRC' , 'SKYPE' , 'YOUR_IRC_NICK' , 'YOUR_SKYPE_NICK'] ;
+// to avoid infinite loopback when $ALLOW_ADMIN_CHAT is true
+//    add all relevant nicks/aliases to $ADMIN_NICKS
+//    else just add those nicks that require admin access
+$ALLOW_ADMIN_CHAT = false ;
+$ADMIN_NICKS      = ['mr-jonze' , 'Mr-Jonze'] ;
+if ($ALLOW_ADMIN_CHAT) $ADMIN_NICKS += ['IRC' , 'SKYPE'] ;
 
 
 $ADMIN_TRIGGER   = '?/' ;
 $SERVER_NICK     = 'BRIDGE' ;
-$SAID_TOKENa     = "[" ; // dont use '<' it will look like html to some clients
-$SAID_TOKENb     = ' said] : ' ;
+$SENDER_TOKENa   = "[" ; // dont use '<' it will look like html to some clients
+$SENDER_TOKENb   = ($ALLOW_ADMIN_CHAT)? ' said] : ' : '] ' ;
 $MYIP_URL        = 'http://ifconfig.me/ip' ;
 $SET_CH1_TRIGGER = 'setch1' ;
 $SET_CH2_TRIGGER = 'setch2' ;
@@ -52,37 +56,35 @@ do
 
   if (!$Proxy->PurpleAccountIsConnected($serviceId)) continue ;
 
-  $chatOutId = $chatInCh ; $msgOut = $SAID_TOKENa . $SERVER_NICK . $SAID_TOKENb ;
+  $chatOutId = $chatInCh ; $msgOut = $SENDER_TOKENa . $SERVER_NICK . $SENDER_TOKENb ;
   $isFromAdmin = in_array($sender , $ADMIN_NICKS) ;
   $isAdminTrigger = (strpos($msgIn , $ADMIN_TRIGGER) === 0) ;
 
-if ($DEBUG) {
-echo "\n" ;
+if ($DEBUG) { echo "\n" ;
 if ($signal->matches($INTERFACE , $CHAT_METHOD)) echo "$CHAT_METHOD" ;
 if ($serviceId == $Ch1Id && $chatInCh == $Ch1Ch) echo " from irc" ;
 if ($serviceId == $Ch2Id && $chatInCh == $Ch2Ch) echo " from skype" ;
-echo "\nreceived msg " . ((!$isFromAdmin)? "from user" :
-      "from admin" . ((!$isAdminTrigger)? " - not trigger" : " - got trigger")) ;
-echo "\ndata[]=\n" ;
-echo "serviceId=$serviceId\n" ;
-echo "sender=$sender\n" ;
-echo "chatInCh=$chatInCh\n" ;
-echo "flags=$data[4]\n" ;
-echo "msgIn='$msgIn'\n" ; }
+echo "\nreceived msg " . ((!$isFromAdmin)? "from user" : "from admin" . ((!$isAdminTrigger)? " - not trigger" : " - got trigger")) ;
+echo "\ndata[]=\nserviceId=$serviceId\nsender=$sender\nchatInCh=$chatInCh\nflags=$data[4]\nmsgIn='$msgIn'\n" ; }
 
   if (!$isFromAdmin || !$isAdminTrigger)
   {
-if ($DEBUG && $isFromAdmin && strpos($msgIn , $SAID_TOKENb)) echo "echo - dropping message\n" ;
+    // filter bridge messages
+    $isRelayedChat = (strpos($msgIn , $SENDER_TOKENb) !== false) ;
+
+if ($DEBUG && $isFromAdmin && (!$ALLOW_ADMIN_CHAT || strpos($msgIn , $SENDER_TOKENb))) echo "echo - dropping message\n" ;
+
+    if ($isFromAdmin && (!$ALLOW_ADMIN_CHAT || $isRelayedChat)) continue ;
+
+    // set outgoing message and channel
+    $msgOut = $SENDER_TOKENa . $sender . $SENDER_TOKENb . $msgIn ;
+    $wasFromIrcChannel = ($serviceId == $Ch1Id && $chatInCh == $Ch1Ch) ;
+    $wasFromSkypeChannel = ($serviceId == $Ch2Id && $chatInCh == $Ch2Ch) ;
+
+if ((!$wasFromIrcChannel || $Ch2Id == $NULL_ID) || (!$wasFromSkypeChannel || $Ch1Id == $NULL_ID)) echo "from unbridged channel - dropping message\n" ;
 if ($DEBUG && $Ch2Ch == $NULL_ID) echo "SkypeCh not set - dropping message\n" ;
 if ($DEBUG && $Ch1Ch == $NULL_ID) echo "IrcCh not set - dropping message\n" ;
 
-    // filter server and relayed messages
-    if ($isFromAdmin && strpos($msgIn , $SAID_TOKENb) !== false) continue ;
-
-    // set outgoing message and channel
-    $msgOut = $SAID_TOKENa . $sender . $SAID_TOKENb . $msgIn ;
-    $wasFromIrcChannel = ($serviceId == $Ch1Id && $chatInCh == $Ch1Ch) ;
-    $wasFromSkypeChannel = ($serviceId == $Ch2Id && $chatInCh == $Ch2Ch) ;
     if ($wasFromIrcChannel && $Ch2Id != $NULL_ID) $chatOutId = $Ch2Ch ;
     elseif ($wasFromSkypeChannel && $Ch1Id != $NULL_ID) $chatOutId = $Ch1Ch ;
     else continue ;
@@ -98,13 +100,13 @@ if ($DEBUG && $Ch1Ch == $NULL_ID) echo "IrcCh not set - dropping message\n" ;
       case $SET_CH1_TRIGGER:
       {
         $Ch1Id = $serviceId ; $Ch1Ch = $chatInCh ;
-        $msgOut .= $CH1_SET_MSG . (($Ch2Ch == $NULL_ID)? "not" : "") . " set" ;
+        $msgOut .= $CH1_SET_MSG . (($Ch2Ch == $NULL_ID)? "not " : "") . " set" ;
         if ($Ch1Id == $Ch2Id && $Ch1Ch == $Ch2Ch) $msgOut .= $LOOPBACK_MSG ;
       } break ;
       case $SET_CH2_TRIGGER:
       {
         $Ch2Id = $serviceId ; $Ch2Ch = $chatInCh ;
-        $msgOut .= $CH2_SET_MSG . (($Ch1Ch == $NULL_ID)? "not" : "") . " set" ;
+        $msgOut .= $CH2_SET_MSG . (($Ch1Ch == $NULL_ID)? "not " : "") . " set" ;
         if ($Ch1Id == $Ch2Id && $Ch1Ch == $Ch2Ch) $msgOut .= $LOOPBACK_MSG ;
       } break ;
       case $ECHO_TRIGGER: { $msgOut .= "$sender said=\: '$msgIn'" ; } break ;

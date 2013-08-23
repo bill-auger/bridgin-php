@@ -10,16 +10,25 @@ skype4pidgin2irc install instructions for debian (ymmv)
 
 /* install pidgin and the skype plugin */
 
+ensure you have access to the multiverse repositories then
+
+    sudo apt-get update
     sudo apt-get install pidgin pidgin-skype
 
 
 /* install the php bridge */
 
+install build dependencies if necessary which may include
+
+    sudo apt-get install php-pear pkg-config php5-dev libdbus-1-dev libxml2-dev
+
+then install the dbus php bindings
+
     pecl install dbus-beta
 
 Add the extension=dbus.so line to your php.ini and restart Apache
 
-    echo extension=dbus.so >> /etc/php5/apache2/php.ini
+    echo extension=dbus.so >> /etc/php5/cli/php.ini
 
 Look at the phpinfo(); and be sure there is an entry for D-Bus
 
@@ -63,6 +72,9 @@ then in one of the channels type
 then in the other channel type
 
     ?/setch2
+
+
+/* nifty tips for additional awesomeness */
 
 for added coolness i suggest changing you IRC nick to 'SKYPE'
 
