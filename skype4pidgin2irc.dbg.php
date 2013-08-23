@@ -1,13 +1,11 @@
 <?php
-$DEBUG = true ; $DEBUGVB = $DEBUG && true ;
-// NEW: to test multiple channels for each of 2 bridges (add del sleep wake chat bcast)
+$DEBUG = true ; $DEBUGVB = $DEBUG && false ;
 // TODO:
 //    apply some sane upper bound on # of channels
 //    using $ALLOW_ADMIN_CHAT is insecure as it merely matches nicks
 //      options include matching against the accountId also
 //      or there is possibly there is something more in the signal objects or API
 //      or remove the feature for production version
-//    refactor chatOut formatting (4x nearly verbatim)
 //    refactor the two hard-coded bridges into an dictionary with named keys
 //      for add rem start stop status - (include isEnabled - lose Idle1Chs)
 //      will allow interfacing such as:
@@ -17,11 +15,6 @@ $DEBUG = true ; $DEBUGVB = $DEBUG && true ;
 //          - shows status information for bridge 'BRIDGE_NAME'
 //    refactor all (array_key_exists($chatInCh , $Bridge1Chs)) into getBridge($chatInCh)
 //        that returns a bridge (channels are restricted to one bridge)
-//    refactor all (strpos($chatIn , $cmd) === 0) into startsWith($chatIn , $cmd)
-//    refactor all (strpos($chatIn , $NICK_POSTFIX) !== false) into contains($chatIn , $cmd)
-//    refactor all substr($chatIn , strlen($cmd) into lstrip($chatIn , $cmd)
-//    refactor all $Proxy->PurpleConvChatSend($Proxy->PurpleConvChat($chatInCh) , $chatOut)
-//        into postMessage($chatInCh , $chatOut)
 //    refactor all $THIS_BRIDGE_MSG clauses (3x verbatim)
 
 
@@ -36,7 +29,7 @@ $APP_NAME = 'skype4pidgin2irc' ; $VERSION = 0.2 ;
 |*|   but their messages will not propogate to other channels unless properly prefixed
 \*/
 $ALLOW_ADMIN_CHAT = false ;
-$ADMIN_NICKS      = [] ;
+$ADMIN_NICKS      = ['Mr-Jonze'] ;
 if ($ALLOW_ADMIN_CHAT) $ADMIN_NICKS += ['IRC' , 'SKYPE'] ;
 $IRC_COMMANDS = ['/me ' , '\01/me'] ;
 
@@ -85,6 +78,24 @@ $PURPLE_OBJECT    = "/im/pidgin/purple/PurpleObject" ;
 $PURPLE_INTERFACE = "im.pidgin.purple.PurpleInterface" ;
 
 
+/* helpers */
+
+function startsWith($msg , $token) { return (strpos($msg , $token) === 0) ; }
+
+function contains($msg , $token) { return (strpos($msg , $token) !== false) ; }
+
+function lstrip($msg , $token) { return substr($msg , strlen($token)) ; }
+
+function chatOut($senderNick , $chatOut)
+{
+  global $NICK_PREFIX , $NICK_POSTFIX ;
+  return $NICK_PREFIX . $senderNick . $NICK_POSTFIX . $chatOut ;
+}
+
+function postMessage($ch , $msg)
+  { global $Proxy ; $Proxy->PurpleConvChatSend($Proxy->PurpleConvChat($ch) , $msg) ; }
+
+
 // initialize messaging and register event dependencies
 $Dbus = new Dbus(Dbus::BUS_SESSION) ;
 $Dbus->addWatch($INTERFACE, $CHAT_METHOD) ;
@@ -111,11 +122,11 @@ while (!$done)
   if (!$Proxy->PurpleAccountIsConnected($accountId)) continue ;
 
   // set loop invariants
-  $chatOut = $adminChatOut = $NICK_PREFIX . $BRIDGE_NICK . $NICK_POSTFIX ;
+  $chatOut = $adminChatOut = chatOut($BRIDGE_NICK , "") ;
   $chatOutChs = [] ;
 
   $isFromAdmin = in_array($senderNick , $ADMIN_NICKS) ;
-  $isAdminTrigger = (strpos($chatIn , $ADMIN_TRIGGER) === 0) ;
+  $isAdminTrigger = (startsWith($chatIn , $ADMIN_TRIGGER)) ;
 
 if ($DEBUG) echo "\n$CHAT_METHOD " ;
 if ($DEBUG) echo (array_key_exists($chatInCh , $Bridge1Chs)? "from bridge 1" : ((array_key_exists($chatInCh , $Bridge2Chs))? "from bridge 2" : "(unbridged)")) ;
@@ -125,7 +136,7 @@ if ($DEBUGVB) echo "\taccountId = $accountId\n\tsenderNick = $senderNick\n\tchat
   if (!$isFromAdmin || !$isAdminTrigger) // chat messages
   {
     // filter bridge messages
-    $isRelayedChat = (strpos($chatIn , $NICK_POSTFIX) !== false) ;
+    $isRelayedChat = (contains($chatIn , $NICK_POSTFIX)) ;
 
 if ($DEBUG && $isFromAdmin && ($isRelayedChat || !$ALLOW_ADMIN_CHAT)) echo (($isRelayedChat)? "relayed" :  "admin") . " chat - dropping message\n" ;
 if ($DEBUG && !array_key_exists($chatInCh , $Bridge1Chs) && !array_key_exists($chatInCh , $Bridge2Chs)) echo "from unbridged channel - dropping message\n" ;
@@ -136,12 +147,12 @@ if ($DEBUG &&  array_key_exists($chatInCh , $Bridge2Chs) && count($Bridge2Chs) <
 
     // parse and strip IRC commands
     $ircCmd = '' ;
-    foreach ($IRC_COMMANDS as $cmd) if (strpos($chatIn , $cmd) === 0)
-      { $chatIn = substr($chatIn , strlen($cmd)) ; $ircCmd = $cmd ; break ; }
+    foreach ($IRC_COMMANDS as $token) if (startsWith($chatIn , $token))
+      { $chatIn = lstrip($chatIn , $token) ; $ircCmd = $token ; break ; }
 
     // set outgoing message and channel
     if ($ircCmd) $senderNick = "* $senderNick" ;
-    $chatOut = $NICK_PREFIX  . $senderNick . $NICK_POSTFIX . $chatIn ;
+    $chatOut = chatOut($senderNick , $chatIn) ;
     if ((array_key_exists($chatInCh , $Bridge1Chs))) $chatOutChs = $Bridge1Chs ;
     elseif ((array_key_exists($chatInCh , $Bridge2Chs))) $chatOutChs = $Bridge2Chs ;
     else continue ;
@@ -149,7 +160,7 @@ if ($DEBUG &&  array_key_exists($chatInCh , $Bridge2Chs) && count($Bridge2Chs) <
   else // admin control messages
   {
     // tokenize and switch on admin triggers
-    $tokens = explode(" " , substr($chatIn , strlen($ADMIN_TRIGGER)) , 2) ;
+    $tokens = explode(" " , lstrip($chatIn , $ADMIN_TRIGGER) , 2) ;
     $trigger = $tokens[0] ; if (isset($tokens[1])) $chatIn = $tokens[1] ;
     switch ($trigger)
     {
@@ -236,15 +247,12 @@ if ($DEBUG &&  array_key_exists($chatInCh , $Bridge2Chs) && count($Bridge2Chs) <
         $adminChatOut .= "\nbridge '1' " . (($bridge1IsEnabled)? "enabled" : "disabled") . " - " . count($bridge1Chs) . $STATS_MSG ;
         $adminChatOut .= "\nbridge '2' " . (($bridge2IsEnabled)? "enabled" : "disabled") . " - " . count($bridge2Chs) . $STATS_MSG ;
       } break ;
-      case $ECHO_TRIGGER:
-      {
-        $adminChatOut = $NICK_PREFIX . $senderNick . $NICK_POSTFIX . $chatIn ;
-      } break ;
+      case $ECHO_TRIGGER: { $adminChatOut = chatOut($senderNick , $chatIn) ; } break ;
       case $CHAT_TRIGGER:
       {
         if (array_key_exists($chatInCh , $Bridge1Chs)) $chatOutChs = $Bridge1Chs ;
         if (array_key_exists($chatInCh , $Bridge2Chs)) $chatOutChs = $Bridge2Chs ;
-        $chatOut = $adminChatOut = $NICK_PREFIX . $senderNick . $NICK_POSTFIX . $chatIn ;
+        $chatOut = $adminChatOut = chatOut($senderNick , $chatIn) ;
       } break ;
       case $BROADCAST_TRIGGER:
       {
@@ -257,12 +265,11 @@ if ($DEBUG &&  array_key_exists($chatInCh , $Bridge2Chs) && count($Bridge2Chs) <
 if ($DEBUG) echo "parsed trigger '$trigger'" . (($adminChatOut == $UNKNOWN_MSG . $chatIn)? " (invalid)" : "") . "\n";
 
     // admin echo
-    $Proxy->PurpleConvChatSend($Proxy->PurpleConvChat($chatInCh) , $adminChatOut) ;
+    postMessage($chatInCh , $adminChatOut) ;
   }
 
   // relay chat
-  foreach ($chatOutChs as $ch => $unsused) if ($ch != $chatInCh)
-    $Proxy->PurpleConvChatSend($Proxy->PurpleConvChat($ch) , $chatOut) ;
+  foreach ($chatOutChs as $ch => $unsused) if ($ch != $chatInCh) postMessage($ch , $chatOut) ;
 
 if ($DEBUGVB && count($chatOutChs) > 1) echo "msgOut = '$chatOut'\nrelaying to " . count($chatOutChs) . " channels\n" ;
 }
