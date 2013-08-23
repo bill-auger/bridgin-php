@@ -26,7 +26,7 @@ then install the dbus php bindings
 
     pecl install dbus-beta
 
-Add the extension=dbus.so line to your php.ini and restart Apache
+Add the extension=dbus.so line to your 'php.ini' config for command line
 
     echo extension=dbus.so >> /etc/php5/cli/php.ini
 
@@ -41,7 +41,7 @@ launch pidgin and create and activate a 'skype(D-Bus)' account
 and set 'Username' under 'Login Options'
 (you can also check 'Auto-start Skype' on the 'Advanced' tab)
 
-you can test that pidgin is setup properly by running
+you can test that your pidgin accounts are setup properly by running
 the 'list-pidgin-accounts.php' via the terminal
 
     list-pidgin-accounts.php
@@ -55,23 +55,25 @@ open the file 'skype4pidgin2irc.php' in a text editor
 
     nano skype4pidgin2irc.php5
 
-and add your nicks/aliases to the $ADMIN_NICKS array
-then save and launch 'skype4pidgin2irc.php' via the terminal
+add to the $ADMIN_NICKS array any nicks that require admin access
+by default $ADMIN_NICKS may chat only on individual channels as usual
+and their messages will not propogate to other channels unless properly prefixed
+save and launch 'skype4pidgin2irc.php' via the terminal
 
     php skype4pidgin2irc.php
 
-in pidgin open a chat session with each channel you want to brigde
+in pidgin open a chat session with each channel you want to bridge
 you may need to get someone else to chat into the skype group
-before it will appear in pidgin
-(NOTE: the script now only handles one 2-way brigde but could easily be
-made to accommodate multiple bridges and multiple channels each)
-then in one of the channels type
+before it will appear in pidgin - then post the following chat message
+into each of the channels youd like to bridge
 
-    ?/setch1
+    ?/addch1
 
-then in the other channel type
+this script handles two bridges with multiple channels each
+there is currently no limit to the number of channels that may be bridged (uayor)
+to create a second discrete bridge repeat as above with the chat message
 
-    ?/setch2
+    ?/addch2
 
 
 /* nifty tips for additional awesomeness */
@@ -87,19 +89,31 @@ and in skype set 'Real Name' in your profile to 'IRC'
 
 the following admin commands are currently supported:
 
-    ?/setch1
-        - sets one end of the bridge
-    ?/setch2
-        - sets the other end of the bridge
-    ?/myip
-        - returns the current puclic server IP
-    ?/sleep
-        - resets bridge channels to null
-    ?/kill
-        - kills the skype4pidgin2irc process
+    ?/add1
+        - adds this channel to bridge 1
+    ?/add2
+        - adds this channel to bridge 2
+    ?/rem1
+        - removes this channel from bridge 1
+    ?/rem2
+        - removes this channel from bridge 2
+    ?/disable1
+        - disable bridge 1
+    ?/disable2
+        - disable bridge 2
+    ?/enable1
+        - enable bridge 1
+    ?/enable2
+        - enable bridge 2
+    ?/status
+        - shows status information for bridges 1 & 2
     ?/echo 'SOME_TEXT'
-        - echoes text to the same channels
-        (you can also ?/setch1 and ?/setch2 in the same channel for loopback)
-
+        - echoes text to the same channel
+    ?/chat 'SOME_TEXT'
+        - relays text to the all channels on this bridge
+    ?/broadcast 'SOME_TEXT'
+        - relays text to the all channels on all bridges as $BRIDGE_NICK
+    ?/shutdown
+        - kills the skype4pidgin2irc process
 
 enjoy :)
