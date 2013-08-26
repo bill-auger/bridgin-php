@@ -1,0 +1,24 @@
+skype4pidgin2irc changelog
+
+
+2013-08-24 - v0.3
+  CURRENT
+    allows multiple named bridges with multiple channels each
+    detailed bridge status reporting
+    admin commands allow accessing bridges by name (add,remove,disable,status)
+    $ALLOW_ADMIN_CHAT feature was deemed undesirable and removed
+    admins may chat over the bridge via explicit commands (echo,chat,broadcast)
+
+2013-08-23 - v0.2
+  4720c51f4b
+    allows two bridges with multiple channels each
+    allows temporary disabling and re-enabling of each bridge
+
+2013-08-22 - v0.1
+  d75d5f6985 
+    allow supression of chat from bridge user via $ALLOW_ADMIN_CHAT var
+
+  bef1449a86
+    initial commit - allows two channels to be bridged
+
+
