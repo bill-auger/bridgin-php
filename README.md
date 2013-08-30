@@ -1,4 +1,3 @@
-
 ### <-- skype4pidgin2irc -->  
 
 &nbsp;&nbsp;&nbsp;&nbsp;nifty little script that enables you  
@@ -43,48 +42,29 @@ along with the 'DBUS_SESSION_BUS_ADDRESS' environment variable
   
 #### configure pidgin
 
-launch pidgin and create and activate an 'IRC' account  
+minimal example:  
+* launch pidgin and create and activate an 'IRC' account  
 and set 'Username' and 'Server' under 'Login Options'  
-launch pidgin and create and activate a 'skype(D-Bus)' account  
+* create and activate a 'skype(D-Bus)' account  
 and set 'Username' under 'Login Options'  
-
-you can test that your pidgin accounts are setup properly  
-by running the 'list-pidgin-accounts.php' script via the terminal
-
-    php list-pidgin-accounts.php
-
-launch skype and it will ask you to grant API permission to pidgin  
-once you do - you should then see your online skype contacts in pidgin
+* launch skype and it will ask you to grant API permission to pidgin  
+if you authorize you then see your online skype contacts in pidgin
   
   
 #### configure skype4pidgin2irc
 
-open the file 'skype4pidgin2irc.php' in a text editor
+configuration is not necessary but may be customized via the config file
 
-    nano skype4pidgin2irc.php
+    nano ./include/skype4pidgin2irc.constants.v0.4.inc
 
-* **IMPORTANT:**
-add to $ADMIN_NICKS nicks for ALL networks that pidgin will connect to  
-this must be done in order to prevent infinte loopback  
-* **IMPORTANT:**
-this script only matches nicknames and will consider to be admin  
-ANY nick on ANY network that matches ANY of the nicks listed in $ADMIN_NICKS  
-so be certain that your nicks are quite unique (e.g. 'fred' is not recommended)  
-this bug/feature is at the top of the TODO: list but for this version be aware  
-
-add to $ADMIN_NICKS any additional nicks that require admin access  
-but note that $ADMIN_NICKS may chat on individual channels as usual  
-and their messages will not propogate to other channels unless properly prefixed  
-
-save and launch 'skype4pidgin2irc.php' via the terminal
+launch 'skype4pidgin2irc.php' via the terminal
 
     php skype4pidgin2irc.php
 
+you will be shown which of your pidgin accounts are setup properly  
 in pidgin open a chat session with each channel you want to bridge  
-you may need to get someone else to chat into a skype group
-for skype chats you may need to wait until someone else chats  
-before it will appear in pidgin - then post the following chat message  
-into each of the channels youd like to bridge
+for skype chats someone else may need to initiate before it will appears in pidgin
+then post the following chat message into each of the channels youd like to bridge  
 
     ?/add
 or
@@ -98,13 +78,20 @@ to create a another discrete bridge repeat as above with a distinct bridge name
     ?/add another-bridge-name
   
   
+#### caveats
+
+local pidgin user is the only admin and may chat on individual channels as usual  
+but messages will not propogate to other channels unless properly prefixed  
+
+  
 #### nifty tips for additional awesomeness
 
-for added coolness i suggest changing you IRC nick to 'SKYPE'
+for added coolness you could set your IRC nick to 'OTHER_CHANNEL' // e.g. 'SKPYE'
 
-    /nick SKYPE
+    /nick OTHER_CHANNEL
 
-and in skype set 'Real Name' in your profile to 'IRC'
+an analogous trick may or may not be possible on all chat services  
+in skype you could set 'Real Name' in your profile to 'OTHER_CHANNEL' // e.g. 'IRC'
   
   
 #### admin commands
