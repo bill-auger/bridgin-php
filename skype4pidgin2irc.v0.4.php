@@ -1,0 +1,64 @@
+<?php
+
+$APP_NAME = 'skype4pidgin2irc' ; $VERSION = '0.4' ;
+$CONSTANTS_FILENAME = "./include/skype4pidgin2irc.constants.v$VERSION.inc" ;
+$FUNCTIONS_FILENAME = "./include/skype4pidgin2irc.functions.v$VERSION.inc" ;
+$GLOBALS_FILENAME   = "./include/skype4pidgin2irc.globals.v$VERSION.inc" ;
+$MAIN_FILENAME      = "./include/skype4pidgin2irc.main.v$VERSION.inc" ;
+
+
+/* init */
+
+require $CONSTANTS_FILENAME ;
+require $FUNCTIONS_FILENAME ;
+include $DEBUG_HELPERS_FILENAME ;
+
+echo "\n$APP_NAME v$VERSION\n\n" ;
+
+// config sanity checks
+if (startsWith($NICK_PREFIX , $TRIGGER_PREFIX) ||
+    startsWith($STAR_PREFIX , $TRIGGER_PREFIX)) { echo $CONFIG_ERROR_MSG ; exit() ; }
+
+// initialize state
+require $GLOBALS_FILENAME ;
+
+// initialize messaging and register event dependencies
+initDbusProxy() ;
+if ($Proxy) echo "$DBUS_OK_MSG\n" ; else { echo "$DBUS_FATAL_MSG\n" ; exit() ; }
+
+// assert pidgin is accessible via dbus
+if ($accounts = getAccounts()) echo "$PURPLE_OK_MSG\n" ;
+else { echo "$PURPLE_ERROR_MSG\n\n" ; exit() ; }
+
+// list pidgin accounts
+echo "$LIST_ACCOUNTS_MSGa " . count($accounts->getData()) . " $LIST_ACCOUNTS_MSGb\n\n" ;
+foreach ($accounts->getData() as $accountId)
+  echo "\t" . getProtocol($accountId) . " (" . getUsername($accountId) . ")\n\t\t" .
+      ((isConnected($accountId))? "" : "not ") . "connected\n" ;
+
+// lets rock
+echo "\n$APP_NAME - $READY_MSGa $TRIGGER_PREFIX$ADD_TRIGGER$READY_MSGb\n\n" ;
+while (!$Done)
+{
+  // trap signals
+  $signal = $Dbus->waitLoop($DBUS_POLL_IVL) ;
+  if (!$signal instanceof DbusSignal) continue ;
+  if (!$signal->matches($PURPLE_INTERFACE , $CHAT_METHOD)) continue ;
+
+  // parse data
+  $msgData = $signal->getData()->getData() ;
+  $thisAccountId = $msgData[0] ; $senderNick    = $msgData[1] ;
+  $chatIn        = $msgData[2] ; $thisChannelId = $msgData[3] ;
+  $msgFlags      = $msgData[4] ;
+  $msgType       = $MESSGAE_FLAGS[(int)$msgFlags] ; // TODO: flags are likely OR'ed
+
+  // validate data
+  if (!$thisAccountId || !$senderNick || !$chatIn || !$thisChannelId ||
+      !isConnected($thisAccountId)) { echo $BOGUS_DATA_MSG ; return ["" , ""] ; }
+
+  require $MAIN_FILENAME ;
+}
+
+exit() ;
+
+?>

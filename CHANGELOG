@@ -1,10 +1,14 @@
 skype4pidgin2irc changelog
 
 
+2013-08-29 - v0.4
+    only local pidgin is admin
+
 2013-08-24 - v0.3
-  CURRENT
+  40e55ef9d8
     allows multiple named bridges with multiple channels each
     detailed bridge status reporting
+    admin is any/only of the $ADMIN_NICKS list
     admin commands allow accessing bridges by name (add,remove,disable,status)
     $ALLOW_ADMIN_CHAT feature was deemed undesirable and removed
     admins may chat over the bridge via explicit commands (echo,chat,broadcast)

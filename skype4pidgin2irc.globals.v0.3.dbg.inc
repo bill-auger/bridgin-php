@@ -1,4 +1,0 @@
-<?php
-
-$Bridges = [] ;
-$Done = false ;

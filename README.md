@@ -29,11 +29,11 @@ install build dependencies if necessary which may include
 there may be others as well and you may need to use your penguin skills  
 to ferret out any hints given in the next step when installing the dbus php bindings
 
-    pecl install dbus-beta
+    sudo pecl install dbus-beta
 
 Add the dbus extension to your 'php.ini' command line config
 
-    echo "extension=dbus.so" >> /etc/php5/cli/php.ini
+    sudo echo "extension=dbus.so" >> /etc/php5/cli/php.ini
 
 type the following command into a terminal and verify that 'dbus' is listed  
 along with the 'DBUS_SESSION_BUS_ADDRESS' environment variable
@@ -53,7 +53,8 @@ by running the 'list-pidgin-accounts.php' script via the terminal
 
     php list-pidgin-accounts.php
 
-launch skype and it will ask you to grant API permission to pidgin
+launch skype and it will ask you to grant API permission to pidgin  
+once you do - you should then see your online skype contacts in pidgin
   
   
 #### configure skype4pidgin2irc
@@ -80,7 +81,8 @@ save and launch 'skype4pidgin2irc.php' via the terminal
     php skype4pidgin2irc.php
 
 in pidgin open a chat session with each channel you want to bridge  
-you may need to get someone else to chat into the skype group  
+you may need to get someone else to chat into a skype group
+for skype chats you may need to wait until someone else chats  
 before it will appear in pidgin - then post the following chat message  
 into each of the channels youd like to bridge
 
