@@ -1,4 +1,4 @@
-### <-- skype4pidgin2irc -->  
+### <-- bridgin -->
 
 &nbsp;&nbsp;&nbsp;&nbsp;nifty little script that enables you  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;to bridge IRC channels and skype chats  
@@ -7,7 +7,7 @@
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;twitter , facebook , identi.ca , and many others)  
 
   
-### skype4pidgin2irc install instructions for debian (ymmv)
+### bridgin install instructions for debian (ymmv)
   
   
 #### install pidgin and the skype plugin
@@ -51,15 +51,15 @@ and set 'Username' under 'Login Options'
 if you authorize you then see your online skype contacts in pidgin
   
   
-#### configure skype4pidgin2irc
+#### configure bridgin
 
 configuration is not necessary but may be customized via the config file
 
-    nano ./include/skype4pidgin2irc.constants.v0.4.inc
+    nano ./include/bridgin.constants.v0.4.inc
 
-launch 'skype4pidgin2irc.php' via the terminal
+launch 'bridgin.php' via the terminal
 
-    php skype4pidgin2irc.php
+    php bridgin.php
 
 you will be shown which of your pidgin accounts are setup properly  
 in pidgin open a chat session with each channel you want to bridge  
@@ -125,7 +125,7 @@ the following admin commands are currently supported:
     ?/broadcast 'SOME_TEXT'
         - relays text to the all channels on all bridges as 'BRIDGE'
     ?/shutdown
-        - kills the skype4pidgin2irc process
+        - kills the bridgin process
 ```
 
 enjoy :)  

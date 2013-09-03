@@ -2,9 +2,9 @@
 $DEBUG = true ; $DEBUGVB = $DEBUG && true ; $DEBUG_ALL = $DEBUG && true ;
 if ($DEBUG)
 {
-  $DEBUG_HELPERS_FILENAME = './DEBUG/skype4pidgin2irc.dbg.helpers.inc' ;
-  $DEBUG_IN_FILENAME      = './DEBUG/skype4pidgin2irc.dbg.in.inc' ;
-  $DEBUG_OUT_FILENAME     = './DEBUG/skype4pidgin2irc.dbg.out.inc' ;
+  $DEBUG_HELPERS_FILENAME = './DEBUG/bridgin.dbg.helpers.inc' ;
+  $DEBUG_IN_FILENAME      = './DEBUG/bridgin.dbg.in.inc' ;
+  $DEBUG_OUT_FILENAME     = './DEBUG/bridgin.dbg.out.inc' ;
 }
 // TODO:
 //  apply some sane upper bound on # of channels

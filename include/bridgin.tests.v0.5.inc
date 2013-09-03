@@ -1,10 +1,10 @@
 <?php
 
-$APP_NAME = 'skype4pidgin2irc' ; $VERSION = '0.4' ;
-$CONSTANTS_FILENAME = "skype4pidgin2irc.constants.v$VERSION.inc" ;
-$FUNCTIONS_FILENAME = "skype4pidgin2irc.functions.v$VERSION.inc" ;
-$GLOBALS_FILENAME   = "skype4pidgin2irc.globals.v$VERSION.inc" ;
-$MAIN_FILENAME      = "skype4pidgin2irc.main.v$VERSION.inc" ;
+$APP_NAME = 'bridgin' ; $VERSION = '0.4' ;
+$CONSTANTS_FILENAME = "bridgin.constants.v$VERSION.inc" ;
+$FUNCTIONS_FILENAME = "bridgin.functions.v$VERSION.inc" ;
+$GLOBALS_FILENAME   = "bridgin.globals.v$VERSION.inc" ;
+$MAIN_FILENAME      = "bridgin.main.v$VERSION.inc" ;
 error_reporting(E_ALL ^ E_NOTICE) ; // suppress 'Undefined index' PHP Notice
 
 
