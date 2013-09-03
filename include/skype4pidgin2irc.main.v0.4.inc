@@ -8,7 +8,7 @@ $isFromAdmin = ($msgType == $LOCAL_OUTGOING_MESSAGE) ;
 $thisBridge = &getBridgeByCh($thisChannelId) ;
 
 
-include $DEBUG_IN_FILENAME ;
+if ($DEBUG) include $DEBUG_IN_FILENAME ;
 
 
 if (!$isFromAdmin) // user chat messages
@@ -110,7 +110,11 @@ else // admin control messages
       $chatOut .= $chatIn ;
       $adminChatOut .= $BROADCAST_MSGa . (count($theseChannels) - 1) . $BROADCAST_MSGb ;
     } break ;
-    case $EXIT_TRIGGER: { $Done = true ; $adminChatOut .= $EXIT_MSG ; } break ;
+    case $EXIT_TRIGGER:
+    {
+      if (storeConfig()) echo "$STORE_CONFIG_MSG\n" ; else echo "$STORE_FAIL_MSG\n" ;
+      $Done = true ; $adminChatOut .= $EXIT_MSG ;
+    } break ;
     default: { $adminChatOut .= "$UNKNOWN_MSG '$TRIGGER_PREFIX$trigger'" ; }
   }
 
@@ -119,7 +123,7 @@ else // admin control messages
 }
 
 
-include $DEBUG_OUT_FILENAME ;
+if ($DEBUG) include $DEBUG_OUT_FILENAME ;
 
 
 // relay chat

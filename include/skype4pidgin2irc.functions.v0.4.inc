@@ -1,5 +1,24 @@
 <?php
 
+/* persistence helpers */
+
+function validateConfig() { return false ; }
+
+function loadConfig()
+{
+  global $BRIDGES_FILENAME , $Bridges ;
+  if (file_exists($BRIDGES_FILENAME))
+    $Bridges = unserialize(file_get_contents($BRIDGES_FILENAME)) ;
+  return validateConfig() ;
+}
+
+function storeConfig()
+{
+  global $BRIDGES_FILENAME , $Bridges ;
+  return file_put_contents($BRIDGES_FILENAME , serialize($Bridges)) ;
+}
+
+
 /* dbus helpers */
 
 function initDbusProxy()

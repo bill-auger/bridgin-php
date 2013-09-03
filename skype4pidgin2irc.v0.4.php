@@ -1,26 +1,30 @@
 <?php
 
-$APP_NAME = 'skype4pidgin2irc' ; $VERSION = '0.4' ;
+$APP_NAME           = 'skype4pidgin2irc' ; $VERSION = '0.4' ;
 $CONSTANTS_FILENAME = "./include/skype4pidgin2irc.constants.v$VERSION.inc" ;
 $FUNCTIONS_FILENAME = "./include/skype4pidgin2irc.functions.v$VERSION.inc" ;
 $GLOBALS_FILENAME   = "./include/skype4pidgin2irc.globals.v$VERSION.inc" ;
 $MAIN_FILENAME      = "./include/skype4pidgin2irc.main.v$VERSION.inc" ;
 
 
-/* init */
-
 require $CONSTANTS_FILENAME ;
 require $FUNCTIONS_FILENAME ;
-include $DEBUG_HELPERS_FILENAME ;
+
+
+if ($DEBUG) include $DEBUG_HELPERS_FILENAME ;
+
+
+/* init */
 
 echo "\n$APP_NAME v$VERSION\n\n" ;
 
-// config sanity checks
-if (startsWith($NICK_PREFIX , $TRIGGER_PREFIX) ||
-    startsWith($STAR_PREFIX , $TRIGGER_PREFIX)) { echo $CONFIG_ERROR_MSG ; exit() ; }
-
 // initialize state
 require $GLOBALS_FILENAME ;
+if (loadConfig()) echo "$LOAD_CONFIG_MSG\n" ; else echo "$LOAD_FAIL_MSG\n" ;
+
+// config sanity checks
+if (startsWith($NICK_PREFIX , $TRIGGER_PREFIX) ||
+    startsWith($STAR_PREFIX , $TRIGGER_PREFIX)) { echo $INVALID_CONFIG_MSG ; exit() ; }
 
 // initialize messaging and register event dependencies
 initDbusProxy() ;
@@ -37,7 +41,7 @@ foreach ($accounts->getData() as $accountId)
       ((isConnected($accountId))? "" : "not ") . "connected\n" ;
 
 // lets rock
-echo "\n$APP_NAME - $READY_MSGa $TRIGGER_PREFIX$ADD_TRIGGER$READY_MSGb\n\n" ;
+echo "\n$APP_NAME - $READY_MSGa" . ((!count($Bridges))? $READY_MSGb : "") . "\n\n" ;
 while (!$Done)
 {
   // trap signals

@@ -4,8 +4,6 @@ if ($DEBUG)
 {
   $DEBUG_HELPERS_FILENAME = './DEBUG/skype4pidgin2irc.dbg.helpers.inc' ;
   $DEBUG_IN_FILENAME      = './DEBUG/skype4pidgin2irc.dbg.in.inc' ;
-  $DEBUG_USER_FILENAME    = './DEBUG/skype4pidgin2irc.dbg.user.inc' ;
-  $DEBUG_ADMIN_FILENAME   = './DEBUG/skype4pidgin2irc.dbg.admin.inc' ;
   $DEBUG_OUT_FILENAME     = './DEBUG/skype4pidgin2irc.dbg.out.inc' ;
 }
 // TODO:
@@ -43,7 +41,12 @@ $AUTH_TRIGGER      = 'auth' ;
 $EXIT_TRIGGER      = 'exit' ;
 
 // init messages
-$CONFIG_ERROR_MSG   = "configuration error - quitting\n" ;
+$BRIDGES_FILENAME   = 'bridges.rc' ;
+$LOAD_CONFIG_MSG    = 'configuration restored' ;
+$LOAD_FAIL_MSG      = 'error loading configuration' ;
+$STORE_CONFIG_MSG   = 'stored configuration' ;
+$STORE_FAIL_MSG     = 'error storing configuration' ;
+$INVALID_CONFIG_MSG = "invalid configuration - quitting\n" ;
 $DBUS_OK_MSG        = "created dbus proxy" ;
 $DBUS_FATAL_MSG     = "dbus error - quitting" ;
 $PURPLE_OK_MSG      = "found purple instance" ;
@@ -51,9 +54,10 @@ $PURPLE_ERROR_MSG   = "no purple instance found - is pidgin running?" ;
 $LIST_ACCOUNTS_MSGa = "found" ;
 $LIST_ACCOUNTS_MSGb = "pidgin accounts:" ;
 $DBUS_ERROR_MSG     = "connection error" ;
-$READY_MSGa         = "ready to bridge channels\nsend the chat message:" ;
-$READY_MSGb         = "\ninto all chats you would like bridged" .
-                      "\nrefer to the file 'README' for more options" ;
+$READY_MSGa         = "ready" ;
+$READY_MSGb         = "\nsend the chat message: $TRIGGER_PREFIX$ADD_TRIGGER" .
+                      "\ninto all chats you would like bridged" .
+                      "\nrefer to the file 'README.md' for more options" ;
 
 // main messages
 $BOGUS_DATA_MSG      = "bogus data received" ;
