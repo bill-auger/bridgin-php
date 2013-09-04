@@ -41,11 +41,9 @@ $AUTH_TRIGGER      = 'auth' ;
 $EXIT_TRIGGER      = 'exit' ;
 
 // init messages
-$BRIDGES_FILENAME   = 'bridges.rc' ;
+$BRIDGES_FILENAME   = 'bridges.dump' ;
 $LOAD_CONFIG_MSG    = 'configuration restored' ;
 $LOAD_FAIL_MSG      = 'error loading configuration' ;
-$STORE_CONFIG_MSG   = 'stored configuration' ;
-$STORE_FAIL_MSG     = 'error storing configuration' ;
 $INVALID_CONFIG_MSG = "invalid configuration - quitting\n" ;
 $DBUS_OK_MSG        = "created dbus proxy" ;
 $DBUS_FATAL_MSG     = "dbus error - quitting" ;
@@ -80,7 +78,9 @@ $STATS_DISABLED_MSG  = "- disabled -" ;
 $STATS_MSGb          = "channels bridged" ;
 $BROADCAST_MSGa      = "broadcast message relayed to " ;
 $BROADCAST_MSGb      = " channels" ;
-$EXIT_MSG            = "shutting down" ;
+$EXIT_MSG            = "shutting down\n" ;
+$STORE_CONFIG_MSG    = 'stored configuration' ;
+$STORE_FAIL_MSG      = 'error storing configuration' ;
 $UNKNOWN_MSG         = "unknown command" ;
 
 // dictionary keys
@@ -98,13 +98,9 @@ $CHAT_METHOD      = 'ReceivedChatMsg' ;
 
 /* schema */
 
-/*
-$Admins =
-{
-  accountId : ['$adminNick' , .... ] ,
-  ....
-}
+// see validateConfig() function in 'functions.inc'
 
+/*
 $Bridges =
 {
   'bridgeName' :

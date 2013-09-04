@@ -112,8 +112,8 @@ else // admin control messages
     } break ;
     case $EXIT_TRIGGER:
     {
-      if (storeConfig()) echo "$STORE_CONFIG_MSG\n" ; else echo "$STORE_FAIL_MSG\n" ;
-      $Done = true ; $adminChatOut .= $EXIT_MSG ;
+      $Done = true ; $adminChatOut .= $EXIT_MSG .
+      $adminChatOut .= (storeConfig())? $STORE_CONFIG_MSG : $STORE_FAIL_MSG ;
     } break ;
     default: { $adminChatOut .= "$UNKNOWN_MSG '$TRIGGER_PREFIX$trigger'" ; }
   }
