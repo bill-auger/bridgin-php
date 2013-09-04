@@ -1,6 +1,6 @@
 <?php
 
-$APP_NAME           = 'bridgin' ; $VERSION = '0.4' ;
+$APP_NAME           = 'bridgin' ; $VERSION = '0.5' ;
 $CONSTANTS_FILENAME = "./include/bridgin.constants.v$VERSION.inc" ;
 $FUNCTIONS_FILENAME = "./include/bridgin.functions.v$VERSION.inc" ;
 $GLOBALS_FILENAME   = "./include/bridgin.globals.v$VERSION.inc" ;
