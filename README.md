@@ -1,6 +1,6 @@
 ### <-- bridgin (with a pidgin) -->
 
-&nbsp;&nbsp;&nbsp;&nbsp;nifty little script that enables you  
+&nbsp;&nbsp;&nbsp;&nbsp;a nifty little script that enables you  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;to bridge multiple chat sessions  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;across the various services supported by libpurple  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(icq , yahoo , aim , msn , myspace , google talk ,  
@@ -27,7 +27,7 @@ so you may need to install the plugins for your favorites additionally
 a list of available plugins can be found on the [pidgin wiki](https://developer.pidgin.im/wiki/ThirdPartyPlugins)  
   
   
-#### install the php bridge
+#### install the dbus php bindings
 
 install build dependencies if necessary which may include
 
