@@ -1,8 +1,8 @@
 ### <-- bridgin -->
 
 &nbsp;&nbsp;&nbsp;&nbsp;nifty little script that enables you  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;to bridge IRC channels and skype chats  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;as well any other service that libpurple supports  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;to bridge multiple chat sessions
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;across the various services supported by libpurple  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(icq , yahoo , aim , msn , myspace , google talk ,  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;twitter , facebook , identi.ca , and many others)  
 
@@ -10,13 +10,21 @@
 ### bridgin install instructions for debian (ymmv)
   
   
-#### install pidgin and the skype plugin
+#### install pidgin and plugins
 
 ensure you have access to the multiverse repositories  
-then update if necessary and install pidgin and its skype plugin
+then update if necessary and install pidgin
 
     sudo apt-get update
-    sudo apt-get install pidgin pidgin-skype
+    sudo apt-get install pidgin
+
+many services are supported by default (irc , yahoo , aim , msn , many others)  
+but some services such as skype and twitter are not installed by default  
+so you may need to install the plugins for your favorites additionally
+
+    sudo apt-get install pidgin-skype
+
+a list of available plugins can be found on the [pidgin wiki](https://developer.pidgin.im/wiki/ThirdPartyPlugins#OfficialPlugins)  
   
   
 #### install the php bridge
@@ -42,7 +50,7 @@ along with the 'DBUS_SESSION_BUS_ADDRESS' environment variable
   
 #### configure pidgin
 
-minimal example:  
+minimal example (IRC <-> skype):
 * launch pidgin and create and activate an 'IRC' account  
 and set 'Username' and 'Server' under 'Login Options'  
 * create and activate a 'skype(D-Bus)' account  
@@ -55,7 +63,7 @@ if you authorize you then see your online skype contacts in pidgin
 
 configuration is not necessary but may be customized via the config file
 
-    nano ./include/bridgin.constants.v0.4.inc
+    nano ./include/bridgin.constants.v`cat ./VERSION`.inc
 
 launch 'bridgin.php' via the terminal
 
@@ -63,8 +71,8 @@ launch 'bridgin.php' via the terminal
 
 you will be shown which of your pidgin accounts are setup properly  
 in pidgin open a chat session with each channel you want to bridge  
-for skype chats someone else may need to initiate before it will appears in pidgin
-then post the following chat message into each of the channels youd like to bridge  
+for skype chats someone else may need to initiate before it will appears in pidgin  
+then post the following chat message into each of the channels youd like to bridge
 
     ?/add
 or
@@ -80,9 +88,11 @@ to create a another discrete bridge repeat as above with a distinct bridge name
   
 #### caveats
 
-local pidgin user is the only admin and may chat on individual channels as usual  
-but messages will not propogate to other channels unless properly prefixed  
-
+* local pidgin user is the only admin and may chat on individual channels as usual  
+but messages will not propogate to other channels unless properly prefixed
+* although bridges and channels are persistent across restarts  
+messages can only be relayed to channels with an open pidgin conversation window
+  
   
 #### nifty tips for additional awesomeness
 
@@ -99,33 +109,35 @@ in skype you could set 'Real Name' in your profile to 'OTHER_CHANNEL' // e.g. 'I
 the following admin commands are currently supported:
 ```
     ?/add
-        - adds this channel to the default bridge
+        - add this channel to the default bridge
     ?/add 'BRIDGE_NAME'
-        - adds this channel to the bridge 'BRIDGE_NAME'
+        - add this channel to the bridge 'BRIDGE_NAME'
     ?/rem
-        - removes this channel from the default bridge
+        - remove this channel from the default bridge
     ?/rem 'BRIDGE_NAME'
-        - removes this channel from the bridge 'BRIDGE_NAME'
+        - remove this channel from the bridge 'BRIDGE_NAME'
     ?/disable
-        - temporarily disables all bridges temporarily
+        - temporarily disable all bridges temporarily
     ?/disable 'BRIDGE_NAME'
-        - temporarily disables the bridge 'BRIDGE_NAME'
+        - temporarily disable the bridge 'BRIDGE_NAME'
     ?/enable
-        - enables all bridges
+        - enable all bridges
     ?/enable 'BRIDGE_NAME'
-        - enables the bridge 'BRIDGE_NAME'
-    ?/status
-        - shows status information for all bridges
-    ?/status 'BRIDGE_NAME'
-        - shows status information for the bridge 'BRIDGE_NAME'
+        - enable the bridge 'BRIDGE_NAME'
     ?/echo 'SOME_TEXT'
-        - echoes text to the same channel
+        - echo text to the same channel
     ?/chat 'SOME_TEXT'
-        - relays text to the all channels on this bridge
+        - relay text to the all channels on this bridge
     ?/broadcast 'SOME_TEXT'
-        - relays text to the all channels on all bridges as 'BRIDGE'
-    ?/shutdown
-        - kills the bridgin process
+        - relay text to the all channels on all bridges as $BRIDGE_NICK
+    ?/status
+        - show status information for all bridges
+    ?/status 'BRIDGE_NAME'
+        - show status information for the bridge 'BRIDGE_NAME'
+    ?/help or ?/
+        - show avaiable admin commands
+    ?/exit
+        - kill the bridgin process
 ```
 
 enjoy :)  

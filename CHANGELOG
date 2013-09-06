@@ -1,5 +1,16 @@
+
 bridgin changelog
 
+
+2013-09-05 - v0.5
+  PENDING
+    added bridges/channels persistence via file dump
+    added detailed channel info to store for detecting and reuniting orphaned channels
+    fixed orphaned channels bug when posting to closed bridged channels
+    wrapped entire main file into handleChat() function to avoid multiple inclusion
+    factored out initialization steps and moved main debugging to init file
+    factored out admin responses
+    added '?/help' commands message
 
 2013-08-29 - v0.4
   78266a1d22
@@ -20,10 +31,8 @@ bridgin changelog
     allows temporary disabling and re-enabling of each bridge
 
 2013-08-22 - v0.1
-  d75d5f6985 
+  d75d5f6985
     allow supression of chat from bridge user via $ALLOW_ADMIN_CHAT var
 
   bef1449a86
     initial commit - allows two channels to be bridged
-
-

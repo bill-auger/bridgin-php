@@ -1,8 +1,16 @@
 <?php
 
+$thisAccountId = $accountId ; $thisChannelId = $channelId ;
+
+// NOTE: $isFromAdmin and $thisBridge should mirror their counterparts in 'main.inc'
+$isFromAdmin = ($msgType == $OUTGOING_MESSAGE) ;
+$thisBridge = &getBridge($thisAccountId , $thisChannelId) ;
+
 $thisBridgeName = (array_key_exists($BRIDGE_NAME_KEY , $thisBridge))? $thisBridge[$BRIDGE_NAME_KEY] : "" ;
 
-$DBG .= "\n$CHAT_METHOD " .
+$convtype = (($signal->matches($PURPLE_INTERFACE , $IM_METHOD))? $IM_METHOD :
+            (($signal->matches($PURPLE_INTERFACE , $CHAT_METHOD))? $CHAT_METHOD : "" )) ;
+$DBG .= "\n$convtype " .
     (($thisBridgeName)? "from bridge '$thisBridgeName'" : "(unbridged)") . " " .
     ((!$isFromAdmin)? "from user $senderNick" :
         "from admin $senderNick" . ((!startsWith($chatIn , $TRIGGER_PREFIX))?
@@ -34,10 +42,10 @@ if (!$isFromAdmin) // normal chat
   if ($DEBUG_ALL && (!$thisBridge || !$thisBridge[$ENABLED_KEY]))
     { echo $DBG ; $DBG = "" ; }
 }
-else if (startsWith($chatIn , chatOut($BRIDGE_NICK , ""))) // admin commands
+else if (startsWith($chatIn , chatOut($NICK_PREFIX , $BRIDGE_NICK , ""))) // admin commands
   $DBG .= "bridge chat - dropping message\n" ;
-else if (startsWith($NICK_PREFIX , $chatIn) || startsWith($chatIn , $STAR_PREFIX))
-  $DBG .= "relayed chat - dropping message\n" ;
+else if (startsWith($chatIn , $NICK_PREFIX) || startsWith($chatIn , $STAR_PREFIX))
+  $DBG .= "loopback - dropping message\n" ;
 else if (!startsWith($chatIn , $TRIGGER_PREFIX))
   $DBG .= "admin chat - dropping message\n" ;
 
