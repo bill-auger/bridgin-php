@@ -1,9 +1,8 @@
-
 bridgin changelog
 
 
 2013-09-05 - v0.5
-  PENDING
+  453e6cf440
     added bridges/channels persistence via file dump
     added detailed channel info to store for detecting and reuniting orphaned channels
     fixed orphaned channels bug when posting to closed bridged channels
