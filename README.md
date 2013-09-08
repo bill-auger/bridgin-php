@@ -113,11 +113,9 @@ the following admin commands are currently supported:
     ?/add 'BRIDGE_NAME'
         - add this channel to the bridge 'BRIDGE_NAME'
     ?/rem
-        - remove this channel from the default bridge
-    ?/rem 'BRIDGE_NAME'
-        - remove this channel from the bridge 'BRIDGE_NAME'
+        - remove this channel from its bridge
     ?/disable
-        - temporarily disable all bridges temporarily
+        - temporarily disable all bridges
     ?/disable 'BRIDGE_NAME'
         - temporarily disable the bridge 'BRIDGE_NAME'
     ?/enable
