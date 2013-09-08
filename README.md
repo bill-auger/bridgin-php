@@ -1,4 +1,4 @@
-### <-- bridgin (with a pidgin) -->
+### <-- bridgin-php -->
 
 &nbsp;&nbsp;&nbsp;&nbsp;a nifty little script that enables you  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;to bridge multiple chat sessions  
@@ -59,7 +59,7 @@ and set 'Username' under 'Login Options'
 if you authorize you then see your online skype contacts in pidgin
   
   
-#### configure bridgin
+#### configure bridgin-php
 
 configuration is not necessary but may be customized via the config file
 
@@ -135,7 +135,7 @@ the following admin commands are currently supported:
     ?/help or ?/
         - show avaiable admin commands
     ?/exit
-        - kill the bridgin process
+        - kill the bridgin-php process
 ```
 
 enjoy :)  
