@@ -141,10 +141,11 @@ function isConnected($accountId)
 
 function getChannelIdByName($channelName , $accountId)
 {
-  global $Proxy , $PURPLE_CONV_TYPE_ANY ;
+  global $Proxy , $PURPLE_CONV_TYPE_ANY , $CHANNEL_NOT_FOUND_MSG ;
 
   $type = $PURPLE_CONV_TYPE_ANY = 4 ;
-  return $Proxy->PurpleFindConversationWithAccount($type , $channelName , $accountId) ;
+  try { return $Proxy->PurpleFindConversationWithAccount($type , $channelName , $accountId) ; }
+  catch(Exception $ex) { echo $CHANNEL_NOT_FOUND_MSG . $channelName . "' (" . $accountId . ")" ; return 0 ; }
 }
 
 function getProtocol($accountId)
