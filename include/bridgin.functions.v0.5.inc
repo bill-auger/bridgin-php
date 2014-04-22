@@ -133,7 +133,7 @@ function getAccounts()
 
 function isConnected($accountId)
 {
-  global $Proxy ;
+  global $Proxy , $DBUS_ERROR_MSG ;
 
   try { return $Proxy->PurpleAccountIsConnected($accountId) ; }
   catch(Exception $ex) { echo $DBUS_ERROR_MSG ; return false ; }
@@ -141,11 +141,11 @@ function isConnected($accountId)
 
 function getChannelIdByName($channelName , $accountId)
 {
-  global $Proxy , $PURPLE_CONV_TYPE_ANY , $CHANNEL_NOT_FOUND_MSG ;
+  global $Proxy , $PURPLE_CONV_TYPE_ANY ;
 
   $type = $PURPLE_CONV_TYPE_ANY = 4 ;
   try { return $Proxy->PurpleFindConversationWithAccount($type , $channelName , $accountId) ; }
-  catch(Exception $ex) { echo $CHANNEL_NOT_FOUND_MSG . $channelName . "' (" . $accountId . ")" ; return 0 ; }
+  catch(Exception $ex) { return 0 ; }
 }
 
 function getProtocol($accountId)
@@ -159,10 +159,11 @@ function getChannelName($channelId)
 
 function postMessage($channelId , $msg)
 {
-  global $Proxy ; if (!$channelId || !$msg) return ;
+  global $Proxy , $UNKNOWN_CHANNEL_MSG ; if (!$channelId || !$msg) return ;
 // TODO: need to distinguish im from chat channels
 //  $Proxy->PurpleConvImSend($Proxy->PurpleConvIm($channelId) , $msg) ;
-  $Proxy->PurpleConvChatSend($Proxy->PurpleConvChat($channelId) , $msg) ;
+  try { $Proxy->PurpleConvChatSend($Proxy->PurpleConvChat($channelId) , $msg) ; }
+  catch(Exception $ex) { echo $UNKNOWN_CHANNEL_MSG . "'$channelId'" ; }
 }
 
 /* chat helpers */
