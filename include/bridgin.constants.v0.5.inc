@@ -66,8 +66,8 @@ $READY_MSGb         = "\nsend the chat message: $TRIGGER_PREFIX$ADD_TRIGGER" .
                       "\nrefer to the file 'README.md' for more options" ;
 
 // main messages
-$DBUS_ERROR_MSG      = "connection error" ;
-$BOGUS_DATA_MSG      = "bogus data received" ;
+$DBUS_ERROR_MSG      = "connection error\n" ;
+$BOGUS_DATA_MSG      = "bogus data received\n" ;
 $UNKNOWN_CHANNEL_MSG = "unknown channel: " ;
 $CH_SET_MSG          = "channel set to bridge" ;
 $BRIDGE_CONFLICT_MSG = "each channel may only be on one bridge" ;

@@ -163,7 +163,7 @@ function postMessage($channelId , $msg)
 // TODO: need to distinguish im from chat channels
 //  $Proxy->PurpleConvImSend($Proxy->PurpleConvIm($channelId) , $msg) ;
   try { $Proxy->PurpleConvChatSend($Proxy->PurpleConvChat($channelId) , $msg) ; }
-  catch(Exception $ex) { echo $UNKNOWN_CHANNEL_MSG . "'$channelId'" ; }
+  catch(Exception $ex) { echo "$UNKNOWN_CHANNEL_MSG '$channelId'\n" ; }
 }
 
 /* chat helpers */
