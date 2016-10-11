@@ -1,15 +1,18 @@
 ### <-- bridgin-php -->
 
-&nbsp;&nbsp;&nbsp;&nbsp;a nifty little script that enables you  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;to bridge multiple chat sessions  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;across the various services supported by libpurple  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(icq , yahoo , aim , msn , myspace , google talk ,  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;twitter , facebook , identi.ca , and many others)  
+&nbsp;&nbsp;&nbsp;&nbsp;a nifty little script  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;to bridge multiple IM and chat sessions  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;across the various chat services supported by libpurple  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(aim, facebook, googletalk, icq, identi.ca,  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;irc, msn, myspace, twitter, yahoo and many others)  
 
-  
+NOTE: this project has no license and is no longer maintained -
+it has been completely re-writtten as a native plugin for pidgin/finch/adium to overcome the limitations of this IPC approach allowing for better stability and more features -
+the bridgin plugin has the same features as bridgin-php (and more) and is AGPL3+ licensed - see here --> https://github.com/bill-auger/bridgin
+
+
 ### install instructions for debian (ymmv)
-  
-  
+
 #### install pidgin and plugins
 
 ensure you have access to the multiverse repositories  
